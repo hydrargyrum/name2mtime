@@ -12,8 +12,8 @@ govet:
 build:
     stage: build
     script:
-        - go build fileutime.go
+        - go build name2mtime.go
     artifacts:
         paths:
-            - ./fileutime
+            - ./name2mtime
         expire_in: "1 month"
