@@ -1,7 +1,7 @@
 package main
 
 import "errors"
-import "log"
+import "fmt"
 import "os"
 import "path"
 import "regexp"
@@ -49,17 +49,32 @@ func tryParse(filename string) (*time.Time, error) {
 }
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Fprintln(os.Stderr, "usage: name2mtime FILE...")
+		os.Exit(64)
+	}
+
+	failures := false
+
 	for _, filepath := range os.Args[1:] {
 		filename := path.Base(filepath)
 
 		if parsed, err := tryParse(filename); err == nil {
 			if err := os.Chtimes(filepath, *parsed, *parsed); err != nil {
-				log.Printf("could not change times of %q: %s\n", filepath, err)
+				failures = true
+				fmt.Fprintf(os.Stderr, "could not change times of %q: %s\n", filepath, err)
 			} else {
-				log.Printf("successfully touched %q", filepath)
+				fmt.Printf("updated %q\n", filepath)
 			}
 		} else {
-			log.Printf("could not parse %q: %s\n", filepath, err)
+			failures = true
+			fmt.Fprintf(os.Stderr, "could not parse date string in %q: %s\n", filepath, err)
 		}
+	}
+
+	if failures {
+		os.Exit(1)
+	} else {
+		os.Exit(0)
 	}
 }
