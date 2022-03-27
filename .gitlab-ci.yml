@@ -1,6 +1,7 @@
 stages:
     - lint
     - build
+    - test
 
 image: golang:1
 
@@ -17,3 +18,8 @@ build:
         paths:
             - ./name2mtime
         expire_in: "1 month"
+
+test:
+    stage: test
+    script:
+        - go test name2mtime_test.go
