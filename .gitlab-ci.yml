@@ -1,0 +1,19 @@
+stages:
+    - lint
+    - build
+
+image: golang:1
+
+govet:
+    stage: lint
+    script:
+        - go vet *.go
+
+build:
+    stage: build
+    script:
+        - go build fileutime.go
+    artifacts:
+        paths:
+            - ./fileutime
+        expire_in: "1 month"
