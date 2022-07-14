@@ -66,7 +66,7 @@ func main() {
 				failures = true
 				fmt.Fprintf(os.Stderr, "could not change times of %q: %s\n", filepath, err)
 			} else {
-				fmt.Printf("updated %q\n", filepath)
+				fmt.Printf("changed %q time to %q\n", filepath, parsed)
 			}
 		} else {
 			failures = true
